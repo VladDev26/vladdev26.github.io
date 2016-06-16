@@ -10,29 +10,36 @@
 
 
 
+var API_KEY = '2696808-a99aca4232c52551e38c21475';
+var URL = "https://pixabay.com/api/?key="+API_KEY+"&q="+encodeURIComponent('red roses');
+$.getJSON(URL, function(data){
+    if (parseInt(data.totalHits) > 0)
+        $.each(data.hits, function(i, hit){ console.log(hit.pageURL); });
+    else
+        console.log('No hits');
+});
 
+// ;(function(){
+// 	var XHR = ("onload" in new XMLHttpRequest()) ? XMLHttpRequest : XDomainRequest;
+// 	var xhr = new XHR();
 
-;(function(){
-	var XHR = ("onload" in new XMLHttpRequest()) ? XMLHttpRequest : XDomainRequest;
-	var xhr = new XHR();
+// 	// xhr.open('GET', 'http://api.pixplorer.co.uk/image?word=doge&amount=5&size=tb', true);
+// 	xhr.open('GET', 'https://pixabay.com/api/?key=2696808-a99aca4232c52551e38c21475&image_type=photo', true);
 
-	// xhr.open('GET', 'http://api.pixplorer.co.uk/image?word=doge&amount=5&size=tb', true);
-	xhr.open('GET', 'https://pixabay.com/api/?key=2696808-a99aca4232c52551e38c21475&image_type=photo', true);
+// 	// xhr.onreadystatechange = function(){
+// 	// 	var data = JSON.parse(this.responseText);
+// 	// 	console.log('onreadystatechange');
+// 	// 	console.log(data);
+// 	// }
 
-	// xhr.onreadystatechange = function(){
-	// 	var data = JSON.parse(this.responseText);
-	// 	console.log('onreadystatechange');
-	// 	console.log(data);
-	// }
-
-	xhr.onload = function(){
-		var data = JSON.parse(this.responseText);
-		console.log('hello');
-		console.log(data);
-	}
-	xhr.send();
+// 	xhr.onload = function(){
+// 		var data = JSON.parse(this.responseText);
+// 		console.log('hello');
+// 		console.log(data);
+// 	}
+// 	xhr.send();
 	
-})();
+// })();
 
 
 
