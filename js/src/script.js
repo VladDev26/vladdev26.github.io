@@ -19,14 +19,15 @@
 	// xhr.open('GET', 'http://api.pixplorer.co.uk/image?word=doge&amount=5&size=tb', true);
 	xhr.open('GET', 'https://pixabay.com/api/?key=2696808-a99aca4232c52551e38c21475&image_type=photo', true);
 
-	xhr.onreadystatechange = function(){
-		var data = JSON.parse(this.responseText);
-		console.log('onreadystatechange');
-		console.log(data);
-	}
+	// xhr.onreadystatechange = function(){
+	// 	var data = JSON.parse(this.responseText);
+	// 	console.log('onreadystatechange');
+	// 	console.log(data);
+	// }
 
 	xhr.onload = function(){
 		var data = JSON.parse(this.responseText);
+		console.log('hello');
 		console.log(data);
 	}
 	xhr.send();
