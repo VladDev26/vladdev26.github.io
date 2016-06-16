@@ -10,19 +10,20 @@
 
 
 
-
+console.log('hello');
 
 
 ;(function(){
 	var XHR = ("onload" in new XMLHttpRequest()) ? XMLHttpRequest : XDomainRequest;
 	var xhr = new XHR();
-	
+
 	// xhr.open('GET', 'http://api.pixplorer.co.uk/image?word=doge&amount=5&size=tb', true);
 	xhr.open('GET', 'https://pixabay.com/api/?key=2696808-a99aca4232c52551e38c21475&image_type=photo', true);
 	xhr.onload = function(){
 		var data = JSON.parse(this.responseText);
 		console.log(data);
 	}
+	console.log('world');
 	xhr.send();
 	
 })();
