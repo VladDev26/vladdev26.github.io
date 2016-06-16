@@ -494,7 +494,6 @@
     width: 100%;
     min-width: 940px;
     background: #1a1915 url("../../img/src/promo_bg.jpg");
-    background-position: center center;
     height: 700px; }
     .promo__wrap {
       background: none;
