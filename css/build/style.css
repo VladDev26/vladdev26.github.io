@@ -53,7 +53,9 @@
     display: inline-block;
     behavior: url("ie8/PIE.htc"); }
     .auth__link--bord {
-      border: 2px solid #fff; }
+      border: 2px solid #fff;
+      position: relative;
+      z-index: 99; }
 
 .logo {
   text-align: center; }
@@ -78,11 +80,13 @@
     font-size: 14px;
     text-decoration: none;
     border-radius: 18px;
-    behavior: url("ie8/PIE.htc");
     display: inline-block;
     color: #fff;
-    background: #ff4e50;
-    padding: 11px 50px; }
+    background-color: #ff4e50;
+    padding: 11px 50px;
+    position: relative;
+    z-index: 99;
+    behavior: url("ie8/PIE.htc"); }
     .click__link--works {
       padding: 4px 14px;
       letter-spacing: 2px;
