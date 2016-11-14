@@ -22031,7 +22031,7 @@
 					sec: 0,
 					score: 1000
 				},
-				quantity: 2,
+				quantity: 54,
 				flag: false
 			};
 			return _this;
@@ -22045,7 +22045,8 @@
 		}, {
 			key: 'goTimer',
 			value: function goTimer() {
-				var timer = setInterval(count.bind(this), 1000);
+				this.timer = setInterval(count.bind(this), 1000);
+	
 				var i = this.state.timer.sec;
 	
 				function count() {
@@ -22053,17 +22054,18 @@
 	
 					this.setState({
 						timer: {
-							timer: timer,
+							// timer,
 							sec: i,
 							score: 1000 - i
 						}
 					});
+					console.log('timer is on!');
 				}
 			}
 		}, {
 			key: 'stopTimer',
 			value: function stopTimer() {
-				clearInterval(this.state.timer.timer);
+				clearInterval(this.timer);
 			}
 		}, {
 			key: 'getFieldSize',
@@ -22072,9 +22074,11 @@
 				xhr.onreadystatechange = function () {
 					if (xhr.readyState == 4 && xhr.status == 200) {
 						// console.log(JSON.parse(xhr.responseText));
+						var parsed = JSON.parse(xhr.responseText);
 						this.setState({
-							hwData: JSON.parse(xhr.responseText),
-							loaded: true
+							hwData: parsed,
+							loaded: true,
+							quantity: parsed.height * parsed.width
 						});
 					}
 				}.bind(this);
@@ -22083,9 +22087,10 @@
 			}
 		}, {
 			key: 'generateLinks',
-			value: function generateLinks(quantity) {
+			value: function generateLinks(number) {
 				// check
-				if (quantity > 32 || quantity < 2 || quantity % 2 != 0 || typeof quantity !== 'number') {
+				var quantity = number / 2;
+				if (quantity > 32 || quantity < 2 || quantity * 2 % 2 != 0 || typeof quantity !== 'number') {
 					console.log('error in generateLinks');
 					return false;
 				}
@@ -22165,23 +22170,40 @@
 				}
 				var allImg = document.getElementsByClassName('game-img-clicked');
 	
-				console.log('allImg: ', allImg.length);
-				// console.log(arr);
-	
-	
-				if (allImg.length == this.state.quantity * 2) {
+				if (allImg.length == this.state.quantity) {
 					this.stopTimer();
-					console.log('stoped!');
+					this.showModal();
 				}
+			}
+		}, {
+			key: 'showModal',
+			value: function showModal() {
+				var modal = document.getElementById('modal');
+				modal.style.width = window.innerWidth + 'px';
+				modal.style.height = window.innerHeight + 'px';
+				modal.classList.toggle('dnone');
+			}
+		}, {
+			key: 'refreshGame',
+			value: function refreshGame() {
+				this.stopTimer();
+				this.setState({
+					src: [],
+					timer: {
+						sec: 0,
+						score: 1000
+					}
+				});
+	
+				document.getElementById('play').removeAttribute('disabled', 'disabled');
+				console.log('refreshed!');
+				document.getElementById('refresh').classList.toggle('dnone');
+				document.getElementById('cells').classList.toggle('dnone');
 			}
 		}, {
 			key: 'play',
 			value: function play() {
-	
-				// this.state.timer.sec === 0 ? this.hello() : this.bye()
-	
-	
-				document.getElementById('play').setAttribute('disabled');
+				document.getElementById('play').setAttribute('disabled', 'disabled');
 	
 				var quantity = this.state.quantity;
 	
@@ -22194,32 +22216,24 @@
 	
 				this.setState({ src: stage3 });
 				this.goTimer();
+	
+				document.getElementById('refresh').classList.toggle('dnone');
+				document.getElementById('cells').classList.toggle('dnone');
 			}
-	
-			// hello(){
-			// 	let quantity = this.state.quantity;
-	
-			// 	let stage1 = this.generateLinks(quantity);
-			// 	if(!stage1){return false;}
-			// 	let stage2 = this.doubleLinks(stage1);
-			// 	let stage3 = this.shuffleLinks(stage2);
-	
-			// 	this.setState({src: stage3});
-			// 	this.goTimer();
-			// }
-			// bye(){
-			// 	console.log('bye');
-			// 	this.setState({
-			// 		timer:{
-			// 			sec: 0,
-			// 			score: 1000
-			// 		}
-			// 	});
-			// 	this.stopTimer();
-			// 	this.hello();
-			// }
-	
-	
+		}, {
+			key: 'closeModal',
+			value: function closeModal() {
+				this.refreshGame();
+				modal.classList.toggle('dnone');
+			}
+		}, {
+			key: 'changeQuantity',
+			value: function changeQuantity(e) {
+				this.setState({
+					quantity: e.target.value
+				});
+				// console.log(e.target.value);
+			}
 		}, {
 			key: 'render',
 			value: function render() {
@@ -22234,11 +22248,16 @@
 				});
 				return _react2.default.createElement(
 					'div',
-					{ className: 'container py-3' },
+					{ className: 'container-fluid py-3' },
+					_react2.default.createElement('input', {
+						id: 'cells',
+						type: 'text',
+						value: this.state.quantity,
+						onChange: this.changeQuantity.bind(this)
+					}),
 					_react2.default.createElement(
 						'div',
-						{ className: 'row' },
-						_react2.default.createElement('input', { className: 'form-control col-xs-2', type: 'text' }),
+						{ className: 'row text-xs-center' },
 						_react2.default.createElement(
 							'button',
 							{ id: 'play', className: 'btn btn-primary',
@@ -22248,18 +22267,18 @@
 						),
 						_react2.default.createElement(
 							'button',
-							{ className: 'btn btn-primary',
-								onClick: this.stopTimer.bind(this)
+							{ id: 'refresh', className: 'btn btn-primary dnone',
+								onClick: this.refreshGame.bind(this)
 							},
-							'Stop'
+							'Refresh'
 						)
 					),
 					_react2.default.createElement(
 						'div',
-						{ className: 'row' },
+						{ className: 'row mt-1' },
 						_react2.default.createElement(
 							'div',
-							{ className: 'col-xs-6' },
+							{ className: 'col-xs-6 text-xs-right' },
 							'Time: ' + this.state.timer.sec
 						),
 						_react2.default.createElement(
@@ -22270,11 +22289,39 @@
 					),
 					_react2.default.createElement(
 						'div',
-						{ className: 'row py-3 text-xs-center' },
+						{ className: 'row py-1 text-xs-center' },
 						_react2.default.createElement(
 							'div',
 							{ id: 'wrapper' },
 							image
+						)
+					),
+					_react2.default.createElement(
+						'div',
+						{ id: 'modal', className: 'dnone modal-wrap' },
+						_react2.default.createElement(
+							'h2',
+							null,
+							'Your time: ',
+							this.state.timer.sec,
+							' sec'
+						),
+						_react2.default.createElement(
+							'h2',
+							null,
+							'Your score: ',
+							this.state.timer.score,
+							' pts'
+						),
+						_react2.default.createElement(
+							'div',
+							null,
+							_react2.default.createElement(
+								'button',
+								{ className: 'btn btn-second',
+									onClick: this.closeModal.bind(this) },
+								'Close'
+							)
 						)
 					)
 				);
@@ -22283,6 +22330,8 @@
 	
 		return Game;
 	}(_react2.default.Component);
+	
+	// <input className="form-control col-xs-2" type="text"/>
 
 /***/ },
 /* 173 */
@@ -22685,7 +22734,7 @@
 	
 	
 	// module
-	exports.push([module.id, "body{background: #2a2b32; color: #fff;}\r\n\r\n#app .nav-link{color:#000;}\r\n\r\n/*#app .img-fluid{max-height: 20em;}*/\r\n\r\n.grid-item { width: 200px; }\r\n\r\n\r\n\r\n.cool-shad-success:hover{\r\n\tbox-shadow: 0px 0px 19px 2px rgba(54,166,46,1);\r\n}\r\n.cool-shad-primary:hover{\r\n\tbox-shadow: 0px 0px 19px 2px #025aa5;\r\n}\r\n.cool-shad-danger:hover{\r\n\tbox-shadow: 0px 0px 19px 2px #d9534f;\r\n}\r\n.cool-shad-warning:hover{\r\n\tbox-shadow: 0px 0px 19px 2px #ec971f;\r\n}\r\n.cool-shad-info:hover{\r\n\tbox-shadow: 0px 0px 19px 2px #31b0d5;\r\n}\r\n\r\n.cool-shad-none:hover{\r\n\tbox-shadow: none;\r\n}\r\n\r\n.opacity0{opacity: 0;}\r\n.dib{display: inline-block;}\r\n\r\n.game-img-clicked{visibility: hidden;}\r\n\r\n\r\n\r\n\r\n", ""]);
+	exports.push([module.id, "body{background: #2a2b32; color: #fff;}\r\n\r\n#app .nav-link{color:#000;}\r\n\r\n/*#app .img-fluid{max-height: 20em;}*/\r\n\r\n.grid-item { width: 200px; }\r\n\r\n\r\n\r\n.cool-shad-success:hover{\r\n\tbox-shadow: 0px 0px 19px 2px rgba(54,166,46,1);\r\n}\r\n.cool-shad-primary:hover{\r\n\tbox-shadow: 0px 0px 19px 2px #025aa5;\r\n}\r\n.cool-shad-danger:hover{\r\n\tbox-shadow: 0px 0px 19px 2px #d9534f;\r\n}\r\n.cool-shad-warning:hover{\r\n\tbox-shadow: 0px 0px 19px 2px #ec971f;\r\n}\r\n.cool-shad-info:hover{\r\n\tbox-shadow: 0px 0px 19px 2px #31b0d5;\r\n}\r\n\r\n.cool-shad-none:hover{\r\n\tbox-shadow: none;\r\n}\r\n\r\n.opacity0{opacity: 0;}\r\n.dib{display: inline-block;}\r\n\r\n.game-img-clicked{visibility: hidden;}\r\n.dnone{display: none;}\r\n\r\n.close-modal{\r\n\tfont-size: 5em;\r\n\tposition: absolute;\r\n}\r\n.modal-wrap{\r\n\tbackground: rgba(0,0,0,.6);\r\n\tposition: absolute;\r\n\tleft: 0;\r\n\ttop: 0;\r\n\ttext-align: center;\r\n\tpadding: 3em 0;\r\n}\r\n", ""]);
 	
 	// exports
 
