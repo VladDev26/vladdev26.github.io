@@ -22086,7 +22086,10 @@
 			}
 		}, {
 			key: 'showAlertQuantity',
-			value: function showAlertQuantity() {}
+			value: function showAlertQuantity() {
+				document.getElementById('quantity-alert').classList.toggle('dnone');
+				this.refreshGame();
+			}
 		}, {
 			key: 'generateLinks',
 			value: function generateLinks(number) {
@@ -22094,7 +22097,7 @@
 				var quantity = number / 2;
 				if (quantity > 32 || quantity < 2 || quantity * 2 % 2 != 0 || typeof quantity !== 'number') {
 					console.log('error in generateLinks');
-					this.showAlertQuantity();
+					// this.refreshGame();
 					return false;
 				}
 	
@@ -22187,6 +22190,12 @@
 				modal.classList.toggle('dnone');
 			}
 		}, {
+			key: 'hasClass',
+			value: function hasClass(id, className) {
+				var flag = document.getElementById(id).classList.contains(className);
+				return flag ? true : false;
+			}
+		}, {
 			key: 'refreshGame',
 			value: function refreshGame() {
 				this.stopTimer();
@@ -22203,27 +22212,37 @@
 				console.log('refreshed!');
 				document.getElementById('refresh').classList.toggle('dnone');
 				document.getElementById('cells').classList.toggle('dnone');
+				document.getElementById('game-title').classList.toggle('dnone');
 			}
 		}, {
 			key: 'play',
 			value: function play() {
 				// document.getElementById('play').setAttribute('disabled', 'disabled');
-				document.getElementById('play').classList.toggle('dnone');
-	
 				var quantity = this.state.quantity;
 	
 				var stage1 = this.generateLinks(quantity);
 				if (!stage1) {
+					this.refreshGame();
+					document.getElementById('play').classList.remove('dnone');
+					document.getElementById('cells').classList.remove('dnone');
+	
+					document.getElementById('quantity-alert').classList.remove('dnone');
+					document.getElementById('refresh').classList.add('dnone');
+					document.getElementById('game-title').classList.add('dnone');
 					return false;
 				}
+	
 				var stage2 = this.doubleLinks(stage1);
 				var stage3 = this.shuffleLinks(stage2);
 	
 				this.setState({ src: stage3 });
 				this.goTimer();
 	
+				document.getElementById('play').classList.toggle('dnone');
 				document.getElementById('refresh').classList.toggle('dnone');
 				document.getElementById('cells').classList.toggle('dnone');
+				document.getElementById('game-title').classList.add('dnone');
+				document.getElementById('quantity-alert').classList.add('dnone');
 			}
 		}, {
 			key: 'closeModal',
@@ -22245,7 +22264,8 @@
 					return _react2.default.createElement(
 						'div',
 						{ key: i, className: "card bg-success cool-shad-success mb-0 dib" },
-						_react2.default.createElement('img', { className: 'card-img-top img-fluid opacity0', onClick: _this2.handleClick.bind(_this2), src: item, alt: '' })
+						_react2.default.createElement('img', { className: 'card-img-top img-fluid opacity0',
+							onClick: _this2.handleClick.bind(_this2), src: item, alt: '' })
 					);
 				});
 				return _react2.default.createElement(
@@ -22263,6 +22283,33 @@
 							'h2',
 							null,
 							'find all the same pictures'
+						)
+					),
+					_react2.default.createElement(
+						'div',
+						{ id: 'quantity-alert', className: 'row py-1 dnone' },
+						_react2.default.createElement(
+							'div',
+							{ className: 'alert alert-danger col-xs-12 col-md-6 offset-md-3' },
+							'You should input some ',
+							_react2.default.createElement(
+								'strong',
+								null,
+								'even'
+							),
+							' number from ',
+							_react2.default.createElement(
+								'strong',
+								null,
+								'4'
+							),
+							' to ',
+							_react2.default.createElement(
+								'strong',
+								null,
+								'64'
+							),
+							'.'
 						)
 					),
 					_react2.default.createElement(
@@ -22340,7 +22387,7 @@
 							null,
 							_react2.default.createElement(
 								'button',
-								{ className: 'btn btn-second',
+								{ className: 'btn btn-info',
 									onClick: this.closeModal.bind(this) },
 								'Close'
 							)

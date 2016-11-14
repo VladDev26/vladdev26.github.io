@@ -22,7 +22,6 @@ export class Game extends React.Component{
 
 	componentDidMount(){
 		this.getFieldSize();
-		
 	}
 
 
@@ -65,7 +64,8 @@ export class Game extends React.Component{
 	}
 
 	showAlertQuantity(){
-		
+		document.getElementById('quantity-alert').classList.toggle('dnone');
+		this.refreshGame();
 	}
 
 	generateLinks(number){
@@ -77,7 +77,7 @@ export class Game extends React.Component{
 			(typeof quantity !== 'number') 
 		){
 			console.log('error in generateLinks');
-			this.showAlertQuantity();
+			// this.refreshGame();
 			return false;	
 		}
 
@@ -160,6 +160,11 @@ export class Game extends React.Component{
 		modal.classList.toggle('dnone');
 	}
 
+	hasClass(id, className){
+		let flag = document.getElementById(id).classList.contains(className);
+		return flag ? true : false;
+	}
+
 	refreshGame(){
 		this.stopTimer();
 		this.setState({
@@ -180,21 +185,31 @@ export class Game extends React.Component{
 
 	play(){
 		// document.getElementById('play').setAttribute('disabled', 'disabled');
-		document.getElementById('play').classList.toggle('dnone');
-
 		let quantity = this.state.quantity;
 
 		let stage1 = this.generateLinks(quantity);
-		if(!stage1){return false;}
+		if(!stage1){
+			this.refreshGame();
+			document.getElementById('play').classList.remove('dnone');
+			document.getElementById('cells').classList.remove('dnone');
+			
+			document.getElementById('quantity-alert').classList.remove('dnone');
+			document.getElementById('refresh').classList.add('dnone');
+			document.getElementById('game-title').classList.add('dnone');
+			return false;
+		}
+
 		let stage2 = this.doubleLinks(stage1);
 		let stage3 = this.shuffleLinks(stage2);
 
 		this.setState({src: stage3});
 		this.goTimer();
 
+		document.getElementById('play').classList.toggle('dnone');
 		document.getElementById('refresh').classList.toggle('dnone');
 		document.getElementById('cells').classList.toggle('dnone');
-		document.getElementById('game-title').classList.toggle('dnone');
+		document.getElementById('game-title').classList.add('dnone');
+		document.getElementById('quantity-alert').classList.add('dnone');
 	}
 
 	closeModal(){
@@ -206,11 +221,14 @@ export class Game extends React.Component{
 		this.setState({quantity: e.target.value});
 	}
 
+	
+
 	render(){
 		let image = this.state.src.map((item, i) => {
 			return(
 				<div key={i} className={"card bg-success cool-shad-success mb-0 dib"}>
-					<img className="card-img-top img-fluid opacity0" onClick={this.handleClick.bind(this)} src={item} alt=""/>
+					<img className="card-img-top img-fluid opacity0"
+					 	onClick={this.handleClick.bind(this)} src={item} alt=""/>
 				</div>
 			);
 		});
@@ -219,6 +237,12 @@ export class Game extends React.Component{
 				<div id="game-title" className="row text-xs-center mb-1">
 					<h1>Twin Pictures Game</h1>
 					<h2>find all the same pictures</h2>
+				</div>
+
+				<div id="quantity-alert" className="row py-1 dnone">
+					<div className="alert alert-danger col-xs-12 col-md-6 offset-md-3">
+						You should input some <strong>even</strong> number from <strong>4</strong> to <strong>64</strong>.
+					</div>
 				</div>
 
 				<div id="cells" className="row text-xs-center mb-1">
@@ -256,7 +280,7 @@ export class Game extends React.Component{
 					<h2>Your time: {this.state.timer.sec} sec</h2>
 					<h2>Your score: {this.state.timer.score} pts</h2>
 					<div>
-						<button className="btn btn-second" 
+						<button className="btn btn-info" 
 							onClick={this.closeModal.bind(this)}>Close</button>
 					</div>
 				</div>
