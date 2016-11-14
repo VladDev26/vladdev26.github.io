@@ -22012,7 +22012,18 @@
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
 	var arr = [];
-	var imagesForGame = ['https://kde.link/test/0.png', 'https://kde.link/test/1.png', 'https://kde.link/test/2.png', 'https://kde.link/test/3.png', 'https://kde.link/test/4.png', 'https://kde.link/test/5.png', 'https://kde.link/test/6.png', 'https://kde.link/test/7.png', 'https://kde.link/test/8.png', 'https://kde.link/test/9.png'];
+	// const imagesForGame = [
+	// 	'https://kde.link/test/0.png',
+	// 	'https://kde.link/test/1.png',
+	// 	'https://kde.link/test/2.png',
+	// 	'https://kde.link/test/3.png',
+	// 	'https://kde.link/test/4.png',
+	// 	'https://kde.link/test/5.png',
+	// 	'https://kde.link/test/6.png',
+	// 	'https://kde.link/test/7.png',
+	// 	'https://kde.link/test/8.png',
+	// 	'https://kde.link/test/9.png'
+	// ];
 	
 	var Game = exports.Game = function (_React$Component) {
 		_inherits(Game, _React$Component);
@@ -22086,32 +22097,36 @@
 				xhr.send(null);
 			}
 		}, {
+			key: 'showAlertQuantity',
+			value: function showAlertQuantity() {}
+		}, {
 			key: 'generateLinks',
 			value: function generateLinks(number) {
 				// check
 				var quantity = number / 2;
 				if (quantity > 32 || quantity < 2 || quantity * 2 % 2 != 0 || typeof quantity !== 'number') {
 					console.log('error in generateLinks');
+					this.showAlertQuantity();
 					return false;
 				}
 	
 				var imgs = 10;
-				var arr = [];
+				var links = [];
 				for (var i = 0; i < quantity; i++) {
 					if (i < imgs) {
-						arr.push('https://kde.link/test/' + i + '.png');
+						links.push('https://kde.link/test/' + i + '.png');
 					} else if (i < imgs * 2) {
 						var j = i - imgs;
-						arr.push('https://kde.link/test/' + j + '.png');
+						links.push('https://kde.link/test/' + j + '.png');
 					} else if (i < imgs * 3) {
 						var k = i - imgs * 2;
-						arr.push('https://kde.link/test/' + k + '.png');
+						links.push('https://kde.link/test/' + k + '.png');
 					} else if (i < imgs * 4) {
 						var l = i - imgs * 3;
-						arr.push('https://kde.link/test/' + l + '.png');
+						links.push('https://kde.link/test/' + l + '.png');
 					}
 				}
-				return arr;
+				return links;
 			}
 		}, {
 			key: 'doubleLinks',
@@ -22195,7 +22210,8 @@
 					}
 				});
 	
-				document.getElementById('play').removeAttribute('disabled', 'disabled');
+				// document.getElementById('play').removeAttribute('disabled', 'disabled');
+				document.getElementById('play').classList.toggle('dnone');
 				console.log('refreshed!');
 				document.getElementById('refresh').classList.toggle('dnone');
 				document.getElementById('cells').classList.toggle('dnone');
@@ -22203,7 +22219,8 @@
 		}, {
 			key: 'play',
 			value: function play() {
-				document.getElementById('play').setAttribute('disabled', 'disabled');
+				// document.getElementById('play').setAttribute('disabled', 'disabled');
+				document.getElementById('play').classList.toggle('dnone');
 	
 				var quantity = this.state.quantity;
 	
@@ -22229,10 +22246,7 @@
 		}, {
 			key: 'changeQuantity',
 			value: function changeQuantity(e) {
-				this.setState({
-					quantity: e.target.value
-				});
-				// console.log(e.target.value);
+				this.setState({ quantity: e.target.value });
 			}
 		}, {
 			key: 'render',
@@ -22249,12 +22263,18 @@
 				return _react2.default.createElement(
 					'div',
 					{ className: 'container-fluid py-3' },
-					_react2.default.createElement('input', {
-						id: 'cells',
-						type: 'text',
-						value: this.state.quantity,
-						onChange: this.changeQuantity.bind(this)
-					}),
+					_react2.default.createElement(
+						'div',
+						{ id: 'cells', className: 'row text-xs-center mb-1' },
+						_react2.default.createElement('input', {
+							className: 'form-control form-control-cells',
+	
+							type: 'text',
+							value: this.state.quantity,
+							onChange: this.changeQuantity.bind(this)
+						}),
+						' cells'
+					),
 					_react2.default.createElement(
 						'div',
 						{ className: 'row text-xs-center' },
@@ -22292,7 +22312,7 @@
 						{ className: 'row py-1 text-xs-center' },
 						_react2.default.createElement(
 							'div',
-							{ id: 'wrapper' },
+							{ id: 'wrapper', className: 'mx-auto' },
 							image
 						)
 					),
@@ -22734,7 +22754,7 @@
 	
 	
 	// module
-	exports.push([module.id, "body{background: #2a2b32; color: #fff;}\r\n\r\n#app .nav-link{color:#000;}\r\n\r\n/*#app .img-fluid{max-height: 20em;}*/\r\n\r\n.grid-item { width: 200px; }\r\n\r\n\r\n\r\n.cool-shad-success:hover{\r\n\tbox-shadow: 0px 0px 19px 2px rgba(54,166,46,1);\r\n}\r\n.cool-shad-primary:hover{\r\n\tbox-shadow: 0px 0px 19px 2px #025aa5;\r\n}\r\n.cool-shad-danger:hover{\r\n\tbox-shadow: 0px 0px 19px 2px #d9534f;\r\n}\r\n.cool-shad-warning:hover{\r\n\tbox-shadow: 0px 0px 19px 2px #ec971f;\r\n}\r\n.cool-shad-info:hover{\r\n\tbox-shadow: 0px 0px 19px 2px #31b0d5;\r\n}\r\n\r\n.cool-shad-none:hover{\r\n\tbox-shadow: none;\r\n}\r\n\r\n.opacity0{opacity: 0;}\r\n.dib{display: inline-block;}\r\n\r\n.game-img-clicked{visibility: hidden;}\r\n.dnone{display: none;}\r\n\r\n.close-modal{\r\n\tfont-size: 5em;\r\n\tposition: absolute;\r\n}\r\n.modal-wrap{\r\n\tbackground: rgba(0,0,0,.6);\r\n\tposition: absolute;\r\n\tleft: 0;\r\n\ttop: 0;\r\n\ttext-align: center;\r\n\tpadding: 3em 0;\r\n}\r\n", ""]);
+	exports.push([module.id, "body{background: #2a2b32; color: #fff;}\r\n\r\n#app .nav-link{color:#000;}\r\n\r\n/*#app .img-fluid{max-height: 20em;}*/\r\n\r\n.grid-item { width: 200px; }\r\n\r\n\r\n\r\n.cool-shad-success:hover{\r\n\tbox-shadow: 0px 0px 19px 2px rgba(54,166,46,1);\r\n}\r\n.cool-shad-primary:hover{\r\n\tbox-shadow: 0px 0px 19px 2px #025aa5;\r\n}\r\n.cool-shad-danger:hover{\r\n\tbox-shadow: 0px 0px 19px 2px #d9534f;\r\n}\r\n.cool-shad-warning:hover{\r\n\tbox-shadow: 0px 0px 19px 2px #ec971f;\r\n}\r\n.cool-shad-info:hover{\r\n\tbox-shadow: 0px 0px 19px 2px #31b0d5;\r\n}\r\n\r\n.cool-shad-none:hover{\r\n\tbox-shadow: none;\r\n}\r\n\r\n.opacity0{opacity: 0;}\r\n.dib{display: inline-block;}\r\n\r\n.game-img-clicked{visibility: hidden;}\r\n.dnone{display: none!important;}\r\n\r\n.close-modal{\r\n\tfont-size: 5em;\r\n\tposition: absolute;\r\n}\r\n.modal-wrap{\r\n\tbackground: rgba(0,0,0,.6);\r\n\tposition: absolute;\r\n\tleft: 0;\r\n\ttop: 0;\r\n\ttext-align: center;\r\n\tpadding: 3em 0;\r\n}\r\n.form-control-cells{\r\n\twidth: 4em;\r\n\tmargin: 0 auto;\r\n\tcolor: #000;\r\n\tdisplay: inline-block;\r\n}\r\n#wrapper{max-width: 50em;}", ""]);
 	
 	// exports
 

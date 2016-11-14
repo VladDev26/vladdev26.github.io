@@ -32,7 +32,7 @@ body{background: #2a2b32; color: #fff;}
 .dib{display: inline-block;}
 
 .game-img-clicked{visibility: hidden;}
-.dnone{display: none;}
+.dnone{display: none!important;}
 
 .close-modal{
 	font-size: 5em;
@@ -46,3 +46,10 @@ body{background: #2a2b32; color: #fff;}
 	text-align: center;
 	padding: 3em 0;
 }
+.form-control-cells{
+	width: 4em;
+	margin: 0 auto;
+	color: #000;
+	display: inline-block;
+}
+#wrapper{max-width: 50em;}

@@ -1,23 +1,11 @@
 import React from "react";
 
 let arr = [];
-const imagesForGame = [
-	'https://kde.link/test/0.png',
-	'https://kde.link/test/1.png',
-	'https://kde.link/test/2.png',
-	'https://kde.link/test/3.png',
-	'https://kde.link/test/4.png',
-	'https://kde.link/test/5.png',
-	'https://kde.link/test/6.png',
-	'https://kde.link/test/7.png',
-	'https://kde.link/test/8.png',
-	'https://kde.link/test/9.png'
-];
 
 export class Game extends React.Component{
 
-	constructor(props){
-		super(props);
+	constructor(){
+		super();
 		this.state = {
 			src: [],
 
@@ -76,6 +64,10 @@ export class Game extends React.Component{
 		xhr.send(null);
 	}
 
+	showAlertQuantity(){
+		
+	}
+
 	generateLinks(number){
 		// check
 		const quantity = number/2;
@@ -85,26 +77,27 @@ export class Game extends React.Component{
 			(typeof quantity !== 'number') 
 		){
 			console.log('error in generateLinks');
-			return false;
+			this.showAlertQuantity();
+			return false;	
 		}
 
 		const imgs = 10;
-		let arr = [];
+		let links = [];
 		for(let i=0; i<quantity; i++){
 			if(i<imgs){
-				arr.push('https://kde.link/test/'+i+'.png');
+				links.push('https://kde.link/test/'+i+'.png');
 			}else if(i<imgs*2){
 				let j = i-imgs;
-				arr.push('https://kde.link/test/'+j+'.png');
+				links.push('https://kde.link/test/'+j+'.png');
 			}else if(i<imgs*3){
 				let k = i-imgs*2;
-				arr.push('https://kde.link/test/'+k+'.png');
+				links.push('https://kde.link/test/'+k+'.png');
 			}else if(i<imgs*4){
 				let l = i-imgs*3;
-				arr.push('https://kde.link/test/'+l+'.png');
+				links.push('https://kde.link/test/'+l+'.png');
 			}
 		}
-		return arr;
+		return links;
 	}
 	doubleLinks(arr){return arr.concat(arr);}
 	shuffleLinks(doubled){
@@ -124,7 +117,6 @@ export class Game extends React.Component{
 		e.target.classList.toggle('opacity0');
 
 		function checkTwin(a){return a !== e.target;}
-
 
 		if(arr[0] === e.target){
 			arr = arr.filter(checkTwin);
@@ -178,14 +170,16 @@ export class Game extends React.Component{
 			}
 		});
 
-		document.getElementById('play').removeAttribute('disabled', 'disabled');
+		// document.getElementById('play').removeAttribute('disabled', 'disabled');
+		document.getElementById('play').classList.toggle('dnone');
 		console.log('refreshed!');
 		document.getElementById('refresh').classList.toggle('dnone');
 		document.getElementById('cells').classList.toggle('dnone');
 	}
 
 	play(){
-		document.getElementById('play').setAttribute('disabled', 'disabled');
+		// document.getElementById('play').setAttribute('disabled', 'disabled');
+		document.getElementById('play').classList.toggle('dnone');
 
 		let quantity = this.state.quantity;
 
@@ -207,10 +201,7 @@ export class Game extends React.Component{
 	}
 
 	changeQuantity(e){
-		this.setState({
-			quantity: e.target.value
-		});
-		// console.log(e.target.value);
+		this.setState({quantity: e.target.value});
 	}
 
 	render(){
@@ -223,12 +214,15 @@ export class Game extends React.Component{
 		});
 		return(
 			<div className="container-fluid py-3">
-				<input 
-					id="cells"
-					type="text" 
-					value={this.state.quantity}
-					onChange={this.changeQuantity.bind(this)}
-				/>
+				<div id="cells" className="row text-xs-center mb-1">
+					<input 
+						className="form-control form-control-cells"
+						
+						type="text" 
+						value={this.state.quantity}
+						onChange={this.changeQuantity.bind(this)}
+					/> cells
+				</div>
 
 				<div className="row text-xs-center">
 					<button id="play" className="btn btn-primary"
@@ -249,7 +243,7 @@ export class Game extends React.Component{
 				</div>
 				
 				<div className="row py-1 text-xs-center">
-					<div id="wrapper">{image}</div>
+					<div id="wrapper" className="mx-auto">{image}</div>
 				</div>
 				<div id="modal" className="dnone modal-wrap">
 					<h2>Your time: {this.state.timer.sec} sec</h2>
