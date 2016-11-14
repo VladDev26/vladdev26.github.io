@@ -175,6 +175,7 @@ export class Game extends React.Component{
 		console.log('refreshed!');
 		document.getElementById('refresh').classList.toggle('dnone');
 		document.getElementById('cells').classList.toggle('dnone');
+		document.getElementById('game-title').classList.toggle('dnone');
 	}
 
 	play(){
@@ -193,6 +194,7 @@ export class Game extends React.Component{
 
 		document.getElementById('refresh').classList.toggle('dnone');
 		document.getElementById('cells').classList.toggle('dnone');
+		document.getElementById('game-title').classList.toggle('dnone');
 	}
 
 	closeModal(){
@@ -214,6 +216,11 @@ export class Game extends React.Component{
 		});
 		return(
 			<div className="container-fluid py-3">
+				<div id="game-title" className="row text-xs-center mb-1">
+					<h1>Twin Pictures Game</h1>
+					<h2>find all the same pictures</h2>
+				</div>
+
 				<div id="cells" className="row text-xs-center mb-1">
 					<input 
 						className="form-control form-control-cells"

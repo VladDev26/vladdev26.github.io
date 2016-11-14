@@ -22012,26 +22012,14 @@
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
 	var arr = [];
-	// const imagesForGame = [
-	// 	'https://kde.link/test/0.png',
-	// 	'https://kde.link/test/1.png',
-	// 	'https://kde.link/test/2.png',
-	// 	'https://kde.link/test/3.png',
-	// 	'https://kde.link/test/4.png',
-	// 	'https://kde.link/test/5.png',
-	// 	'https://kde.link/test/6.png',
-	// 	'https://kde.link/test/7.png',
-	// 	'https://kde.link/test/8.png',
-	// 	'https://kde.link/test/9.png'
-	// ];
 	
 	var Game = exports.Game = function (_React$Component) {
 		_inherits(Game, _React$Component);
 	
-		function Game(props) {
+		function Game() {
 			_classCallCheck(this, Game);
 	
-			var _this = _possibleConstructorReturn(this, (Game.__proto__ || Object.getPrototypeOf(Game)).call(this, props));
+			var _this = _possibleConstructorReturn(this, (Game.__proto__ || Object.getPrototypeOf(Game)).call(this));
 	
 			_this.state = {
 				src: [],
@@ -22263,6 +22251,20 @@
 				return _react2.default.createElement(
 					'div',
 					{ className: 'container-fluid py-3' },
+					_react2.default.createElement(
+						'div',
+						{ id: 'game-title', className: 'row text-xs-center mb-1' },
+						_react2.default.createElement(
+							'h1',
+							null,
+							'Twin Pictures Game'
+						),
+						_react2.default.createElement(
+							'h2',
+							null,
+							'find all the same pictures'
+						)
+					),
 					_react2.default.createElement(
 						'div',
 						{ id: 'cells', className: 'row text-xs-center mb-1' },
