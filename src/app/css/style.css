@@ -1,0 +1,55 @@
+body{background: #2a2b32; color: #fff;}
+
+#app .nav-link{color:#000;}
+
+/*#app .img-fluid{max-height: 20em;}*/
+
+.grid-item { width: 200px; }
+
+
+
+.cool-shad-success:hover{
+	box-shadow: 0px 0px 19px 2px rgba(54,166,46,1);
+}
+.cool-shad-primary:hover{
+	box-shadow: 0px 0px 19px 2px #025aa5;
+}
+.cool-shad-danger:hover{
+	box-shadow: 0px 0px 19px 2px #d9534f;
+}
+.cool-shad-warning:hover{
+	box-shadow: 0px 0px 19px 2px #ec971f;
+}
+.cool-shad-info:hover{
+	box-shadow: 0px 0px 19px 2px #31b0d5;
+}
+
+.cool-shad-none:hover{
+	box-shadow: none;
+}
+
+.opacity0{opacity: 0;}
+.dib{display: inline-block;}
+
+.game-img-clicked{visibility: hidden;}
+.dnone{display: none!important;}
+
+.close-modal{
+	font-size: 5em;
+	position: absolute;
+}
+.modal-wrap{
+	background: rgba(0,0,0,.6);
+	position: absolute;
+	left: 0;
+	top: 0;
+	text-align: center;
+	padding: 3em 0;
+}
+.form-control-cells{
+	width: 4em;
+	margin: 0 auto;
+	color: #000;
+	display: inline-block;
+}
+#wrapper{max-width: 50em;}
