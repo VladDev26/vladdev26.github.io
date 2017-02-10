@@ -59,21 +59,13 @@
 	
 	var _Game2 = _interopRequireDefault(_Game);
 	
-	__webpack_require__(/*! ../../~/bootstrap/dist/css/bootstrap.min.css */ 180);
+	__webpack_require__(/*! ../../~/bootstrap/dist/css/bootstrap.min.css */ 182);
 	
-	__webpack_require__(/*! ./css/style.css */ 184);
+	__webpack_require__(/*! ./css/style.css */ 186);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	var App = function App() {
-		return _react2.default.createElement(
-			"div",
-			null,
-			_react2.default.createElement(_Game2.default, null)
-		);
-	};
-	
-	(0, _reactDom.render)(_react2.default.createElement(App, null), document.getElementById('app'));
+	(0, _reactDom.render)(_react2.default.createElement(_Game2.default, null), document.getElementById('app'));
 
 /***/ },
 /* 1 */
@@ -22059,7 +22051,15 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _elements = __webpack_require__(/*! ../const/elements */ 179);
+	var _Items = __webpack_require__(/*! ./Items */ 179);
+	
+	var _Items2 = _interopRequireDefault(_Items);
+	
+	var _Buttons = __webpack_require__(/*! ./Buttons */ 180);
+	
+	var _Buttons2 = _interopRequireDefault(_Buttons);
+	
+	var _elements = __webpack_require__(/*! ../const/elements */ 181);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -22108,9 +22108,7 @@
 			key: "goTimer",
 			value: function goTimer() {
 				this.timer = setInterval(count.bind(this), 1000);
-	
 				var i = this.state.timer.sec;
-	
 				function count() {
 					i < 1000 ? i++ : this.stopTimer();
 	
@@ -22151,7 +22149,7 @@
 				if (half > 32 || half < 2 || half * 2 % 2 != 0 || typeof half !== 'number') {
 					this.setState({
 						showQuantityAlert: true,
-						showGameTitle: false,
+						showGameTitle: true,
 	
 						showPlayBtn: true,
 						showRefreshBtn: false,
@@ -22166,21 +22164,15 @@
 			value: function generateLinks(number) {
 				if (!this.checkCellsNumber(number)) return;
 	
-				var imgs = 10;
+				var limit = 10;
+				var num = number / 2;
 				var links = [];
-				for (var i = 0; i < number / 2; i++) {
-					if (i < imgs) {
-						links.push('https://kde.link/test/' + i + '.png');
-					} else if (i < imgs * 2) {
-						var j = i - imgs;
-						links.push('https://kde.link/test/' + j + '.png');
-					} else if (i < imgs * 3) {
-						var k = i - imgs * 2;
-						links.push('https://kde.link/test/' + k + '.png');
-					} else if (i < imgs * 4) {
-						var l = i - imgs * 3;
-						links.push('https://kde.link/test/' + l + '.png');
+	
+				for (var i = 0, k = 0; i < num; i++, k++) {
+					if (k === limit) {
+						k = 0;
 					}
+					links.push("https://kde.link/test/" + k + ".png");
 				}
 				return links;
 			}
@@ -22204,50 +22196,76 @@
 				var target = e.target;
 				target.classList.toggle('opacity0');
 	
-				if (arr[0] === target) {
-					arr = arr.filter(function (el) {
-						return el !== target;
-					});
-				} else if (arr.length >= 2) {
-					arr[0].classList.toggle('opacity0');
-					arr[1].classList.toggle('opacity0');
-					arr = [];
-					arr.push(target);
-				} else {
-					arr.push(target);
-					if (arr[0] && arr[1]) {
-						if (arr[0].src === arr[1].src) {
-							var _iteratorNormalCompletion = true;
-							var _didIteratorError = false;
-							var _iteratorError = undefined;
+				switch (true) {
+					case arr[0] === target:
+						arr = arr.filter(function (el) {
+							return el !== target;
+						});
+						break;
+					case arr.length >= 2:
+						var _iteratorNormalCompletion = true;
+						var _didIteratorError = false;
+						var _iteratorError = undefined;
 	
+						try {
+							for (var _iterator = arr[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+								var elem = _step.value;
+								elem.classList.toggle('opacity0');
+							}
+						} catch (err) {
+							_didIteratorError = true;
+							_iteratorError = err;
+						} finally {
 							try {
-								for (var _iterator = arr[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-									var elem = _step.value;
-	
-									elem.parentElement.className += ' bg-danger';
-									elem.parentElement.classList.toggle('cool-shad-success');
-									elem.classList.toggle('game-img-clicked');
+								if (!_iteratorNormalCompletion && _iterator.return) {
+									_iterator.return();
 								}
-							} catch (err) {
-								_didIteratorError = true;
-								_iteratorError = err;
 							} finally {
-								try {
-									if (!_iteratorNormalCompletion && _iterator.return) {
-										_iterator.return();
-									}
-								} finally {
-									if (_didIteratorError) {
-										throw _iteratorError;
-									}
+								if (_didIteratorError) {
+									throw _iteratorError;
 								}
 							}
-	
-							arr = [];
 						}
-					}
+	
+						arr = [];
+						arr.push(target);
+						break;
+					default:
+						arr.push(target);
+						if (arr[0] && arr[1]) {
+							if (arr[0].src === arr[1].src) {
+								var _iteratorNormalCompletion2 = true;
+								var _didIteratorError2 = false;
+								var _iteratorError2 = undefined;
+	
+								try {
+									for (var _iterator2 = arr[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+										var _elem = _step2.value;
+	
+										_elem.parentElement.classList.add('bg-danger');
+										_elem.parentElement.classList.remove('cool-shad-success');
+										_elem.classList.toggle('game-img-clicked');
+									}
+								} catch (err) {
+									_didIteratorError2 = true;
+									_iteratorError2 = err;
+								} finally {
+									try {
+										if (!_iteratorNormalCompletion2 && _iterator2.return) {
+											_iterator2.return();
+										}
+									} finally {
+										if (_didIteratorError2) {
+											throw _iteratorError2;
+										}
+									}
+								}
+	
+								arr = [];
+							}
+						}
 				}
+	
 				var allImg = document.getElementsByClassName('game-img-clicked');
 	
 				if (allImg.length == this.state.quantity) {
@@ -22271,8 +22289,6 @@
 					showRefreshBtn: false,
 					showCells: true
 				});
-	
-				// console.log('refreshed!');
 			}
 		}, {
 			key: "play",
@@ -22323,30 +22339,7 @@
 				var _this3 = this;
 	
 				var state = this.state;
-				// console.log(state.hwData);
-				var image = state.src.map(function (item, i) {
-					return _react2.default.createElement(
-						"div",
-						{ key: i, className: "card bg-success cool-shad-success mb-0 dib" },
-						_react2.default.createElement("img", { className: "card-img-top img-fluid opacity0",
-							onClick: _this3.handleClick.bind(_this3), src: item, alt: "" })
-					);
-				});
 	
-				var playBtn = _react2.default.createElement(
-					"button",
-					{ className: "btn btn-primary",
-						onClick: this.play.bind(this)
-					},
-					"Play"
-				);
-				var refreshBtn = _react2.default.createElement(
-					"button",
-					{ className: "btn btn-primary",
-						onClick: this.refreshGame.bind(this)
-					},
-					"Refresh"
-				);
 				var cells = _react2.default.createElement(
 					"div",
 					{ id: "cells", className: "row text-xs-center mb-1" },
@@ -22393,12 +22386,12 @@
 					state.showGameTitle ? _elements.gameTitle : null,
 					state.showQuantityAlert ? _elements.quantityAlert : null,
 					state.showCells ? cells : null,
-					_react2.default.createElement(
-						"div",
-						{ className: "row text-xs-center" },
-						state.showPlayBtn ? playBtn : null,
-						state.showRefreshBtn ? refreshBtn : null
-					),
+					_react2.default.createElement(_Buttons2.default, {
+						showPlayBtn: state.showPlayBtn,
+						showRefreshBtn: state.showRefreshBtn,
+						play: this.play.bind(this),
+						refreshGame: this.refreshGame.bind(this)
+					}),
 					_react2.default.createElement(
 						"div",
 						{ className: "row mt-1" },
@@ -22413,15 +22406,7 @@
 							'Score: ' + state.timer.score
 						)
 					),
-					_react2.default.createElement(
-						"div",
-						{ className: "row py-1 text-xs-center" },
-						_react2.default.createElement(
-							"div",
-							{ id: "wrapper", className: "mx-auto" },
-							image
-						)
-					),
+					_react2.default.createElement(_Items2.default, { images: state.src, handleClick: this.handleClick.bind(this) }),
 					state.showModal ? modal : null
 				);
 			}
@@ -22434,6 +22419,91 @@
 
 /***/ },
 /* 179 */
+/*!*************************************!*\
+  !*** ./src/app/components/Items.js ***!
+  \*************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+	
+	var _react = __webpack_require__(/*! react */ 1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var Items = function Items(props) {
+		var image = props.images.map(function (item, i) {
+			return _react2.default.createElement(
+				"div",
+				{ key: i, className: "card bg-success cool-shad-success mb-0 dib" },
+				_react2.default.createElement("img", { className: "card-img-top img-fluid opacity0",
+					onClick: props.handleClick, src: item, alt: i })
+			);
+		});
+		return _react2.default.createElement(
+			"div",
+			{ className: "row py-1 text-xs-center" },
+			_react2.default.createElement(
+				"div",
+				{ id: "wrapper", className: "mx-auto" },
+				image
+			)
+		);
+	};
+	
+	exports.default = Items;
+
+/***/ },
+/* 180 */
+/*!***************************************!*\
+  !*** ./src/app/components/Buttons.js ***!
+  \***************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+	
+	var _react = __webpack_require__(/*! react */ 1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var Buttons = function Buttons(props) {
+		var playBtn = _react2.default.createElement(
+			"button",
+			{ className: "btn btn-primary",
+				onClick: props.play
+			},
+			"Play"
+		);
+		var refreshBtn = _react2.default.createElement(
+			"button",
+			{ className: "btn btn-primary",
+				onClick: props.refreshGame
+			},
+			"Refresh"
+		);
+		return _react2.default.createElement(
+			"div",
+			{ className: "row text-xs-center" },
+			props.showPlayBtn ? playBtn : null,
+			props.showRefreshBtn ? refreshBtn : null
+		);
+	};
+	
+	exports.default = Buttons;
+
+/***/ },
+/* 181 */
 /*!***********************************!*\
   !*** ./src/app/const/elements.js ***!
   \***********************************/
@@ -22496,7 +22566,7 @@
 	);
 
 /***/ },
-/* 180 */
+/* 182 */
 /*!************************************************!*\
   !*** ./~/bootstrap/dist/css/bootstrap.min.css ***!
   \************************************************/
@@ -22505,10 +22575,10 @@
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(/*! !./../../../css-loader!./bootstrap.min.css */ 181);
+	var content = __webpack_require__(/*! !./../../../css-loader!./bootstrap.min.css */ 183);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(/*! ./../../../style-loader/addStyles.js */ 183)(content, {});
+	var update = __webpack_require__(/*! ./../../../style-loader/addStyles.js */ 185)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
@@ -22525,13 +22595,13 @@
 	}
 
 /***/ },
-/* 181 */
+/* 183 */
 /*!***************************************************************!*\
   !*** ./~/css-loader!./~/bootstrap/dist/css/bootstrap.min.css ***!
   \***************************************************************/
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(/*! ./../../../css-loader/lib/css-base.js */ 182)();
+	exports = module.exports = __webpack_require__(/*! ./../../../css-loader/lib/css-base.js */ 184)();
 	// imports
 	
 	
@@ -22542,7 +22612,7 @@
 
 
 /***/ },
-/* 182 */
+/* 184 */
 /*!**************************************!*\
   !*** ./~/css-loader/lib/css-base.js ***!
   \**************************************/
@@ -22601,7 +22671,7 @@
 
 
 /***/ },
-/* 183 */
+/* 185 */
 /*!*************************************!*\
   !*** ./~/style-loader/addStyles.js ***!
   \*************************************/
@@ -22856,7 +22926,7 @@
 
 
 /***/ },
-/* 184 */
+/* 186 */
 /*!*******************************!*\
   !*** ./src/app/css/style.css ***!
   \*******************************/
@@ -22865,10 +22935,10 @@
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(/*! !./../../../~/css-loader!./style.css */ 185);
+	var content = __webpack_require__(/*! !./../../../~/css-loader!./style.css */ 187);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(/*! ./../../../~/style-loader/addStyles.js */ 183)(content, {});
+	var update = __webpack_require__(/*! ./../../../~/style-loader/addStyles.js */ 185)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
@@ -22885,18 +22955,18 @@
 	}
 
 /***/ },
-/* 185 */
+/* 187 */
 /*!**********************************************!*\
   !*** ./~/css-loader!./src/app/css/style.css ***!
   \**********************************************/
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(/*! ./../../../~/css-loader/lib/css-base.js */ 182)();
+	exports = module.exports = __webpack_require__(/*! ./../../../~/css-loader/lib/css-base.js */ 184)();
 	// imports
 	
 	
 	// module
-	exports.push([module.id, "body{background: #2a2b32; color: #fff;}\r\n\r\n#app .nav-link{color:#000;}\r\n\r\n/*#app .img-fluid{max-height: 20em;}*/\r\n\r\n.grid-item { width: 200px; }\r\n\r\n\r\n\r\n.cool-shad-success:hover{\r\n\tbox-shadow: 0px 0px 19px 2px rgba(54,166,46,1);\r\n}\r\n.cool-shad-primary:hover{\r\n\tbox-shadow: 0px 0px 19px 2px #025aa5;\r\n}\r\n.cool-shad-danger:hover{\r\n\tbox-shadow: 0px 0px 19px 2px #d9534f;\r\n}\r\n.cool-shad-warning:hover{\r\n\tbox-shadow: 0px 0px 19px 2px #ec971f;\r\n}\r\n.cool-shad-info:hover{\r\n\tbox-shadow: 0px 0px 19px 2px #31b0d5;\r\n}\r\n\r\n.cool-shad-none:hover{\r\n\tbox-shadow: none;\r\n}\r\n\r\n.opacity0{opacity: 0;}\r\n.dib{display: inline-block;}\r\n\r\n.game-img-clicked{visibility: hidden;}\r\n.dnone{display: none!important;}\r\n\r\n.close-modal{\r\n\tfont-size: 5em;\r\n\tposition: absolute;\r\n}\r\n.modal-wrap{\r\n\tbackground: rgba(0,0,0,.6);\r\n\tposition: absolute;\r\n\tleft: 0;\r\n\ttop: 0;\r\n\ttext-align: center;\r\n\tpadding: 3em 0;\r\n\twidth: 100%;\r\n\tmin-height: 100vh;\r\n}\r\n.form-control-cells{\r\n\twidth: 4em;\r\n\tmargin: 0 auto;\r\n\tcolor: #000;\r\n\tdisplay: inline-block;\r\n}\r\n#wrapper{max-width: 50em;}", ""]);
+	exports.push([module.id, "body{background: #2a2b32; color: #fff;}\r\n\r\n#app .nav-link{color:#000;}\r\n\r\n/*#app .img-fluid{max-height: 20em;}*/\r\n\r\n.grid-item { width: 200px; }\r\n\r\n\r\n\r\n.cool-shad-success:hover{\r\n\tbox-shadow: 0px 0px 19px 2px rgba(54,166,46,1);\r\n}\r\n.cool-shad-primary:hover{\r\n\tbox-shadow: 0px 0px 19px 2px #025aa5;\r\n}\r\n.cool-shad-danger:hover{\r\n\tbox-shadow: 0px 0px 19px 2px #d9534f;\r\n}\r\n.cool-shad-warning:hover{\r\n\tbox-shadow: 0px 0px 19px 2px #ec971f;\r\n}\r\n.cool-shad-info:hover{\r\n\tbox-shadow: 0px 0px 19px 2px #31b0d5;\r\n}\r\n\r\n.cool-shad-none:hover{\r\n\tbox-shadow: none;\r\n}\r\n\r\n.opacity0{opacity: 0;}\r\n.dib{display: inline-block;}\r\n\r\n.game-img-clicked{visibility: hidden;}\r\n.dnone{display: none!important;}\r\n\r\n.close-modal{\r\n\tfont-size: 5em;\r\n\tposition: absolute;\r\n}\r\n.modal-wrap{\r\n\tbackground: rgba(0,0,0,.7);\r\n\tposition: absolute;\r\n\tleft: 0;\r\n\ttop: 0;\r\n\ttext-align: center;\r\n\tpadding: 3em 0;\r\n\twidth: 100%;\r\n\tmin-height: 100vh;\r\n}\r\n.form-control-cells{\r\n\twidth: 4em;\r\n\tmargin: 0 auto;\r\n\tcolor: #000;\r\n\tdisplay: inline-block;\r\n}\r\n#wrapper{max-width: 50em;}\r\n.card{max-width: 75px;}", ""]);
 	
 	// exports
 

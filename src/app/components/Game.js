@@ -1,4 +1,5 @@
 import React, {Component} from "react";
+import axios from "axios";
 
 import Items from "./Items";
 import Buttons from "./Buttons";
@@ -14,12 +15,11 @@ export default class Game extends Component{
 		this.state = {
 			src: [],
 			hwData: {},
-			loaded: false,
 			timer: {
 				sec: 0,
 				score: 1000
 			},
-			quantity: 54,
+			quantity: 64,
 
 			showQuantityAlert: false,
 			showGameTitle: true,
@@ -31,15 +31,13 @@ export default class Game extends Component{
 	}
 
 	componentDidMount(){
-		this.getFieldSize();
+		this.fetchFieldSize();
 	}
 
 
 	goTimer(){
 		this.timer = setInterval(count.bind(this), 1000);
-		
 		let i = this.state.timer.sec;
-
 		function count(){
 			i<1000 ? i++ : this.stopTimer()
 			
@@ -53,20 +51,12 @@ export default class Game extends Component{
 	}
 	stopTimer(){clearInterval(this.timer);}
 
-	getFieldSize(){
-		let xhr = new XMLHttpRequest();
-		xhr.onreadystatechange = function() {
-			if(xhr.readyState == 4 && xhr.status == 200) {
-				const parsed = JSON.parse(xhr.responseText);
-				this.setState({
-					hwData: parsed,
-					loaded: true,
-					quantity: parsed.height*parsed.width
-				});
-			}
-		}.bind(this);
-		xhr.open('GET', 'https://kde.link/test/get_field_size.php', true);
-		xhr.send(null);
+	fetchFieldSize(){
+		axios.get('https://kde.link/test/get_field_size.php')
+			.then(response => {
+				let {height, width} = response.data;
+				this.setState({quantity: height * width});
+			});
 	}
 
 	checkCellsNumber(number){
@@ -93,7 +83,7 @@ export default class Game extends Component{
 		if(!this.checkCellsNumber(number)) return;
 
 		const limit = 10;
-		let num = number/2;
+		const num = number/2;
 		let links = [];
 
 		for(let i=0, k=0; i<num; i++, k++){
@@ -133,16 +123,16 @@ export default class Game extends Component{
 				if(arr[0] && arr[1]){
 					if (arr[0].src === arr[1].src){
 						for(let elem of arr){
-							elem.parentElement.classList.add('bg-danger');
-							elem.parentElement.classList.remove('cool-shad-success');
-							elem.classList.toggle('game-img-clicked');
+							elem.parentElement.classList.add('bg-success');
+							elem.parentElement.classList.remove('cool-shad-primary');
+							elem.classList.toggle('visib-hidden');
 						}
 						arr = [];
 					}
 				}
 		}
 
-		let allImg = document.getElementsByClassName('game-img-clicked');
+		let allImg = document.getElementsByClassName('visib-hidden');
 
 		if(allImg.length == this.state.quantity){
 			this.stopTimer();
