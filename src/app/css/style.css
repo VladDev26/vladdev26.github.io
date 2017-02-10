@@ -39,12 +39,14 @@ body{background: #2a2b32; color: #fff;}
 	position: absolute;
 }
 .modal-wrap{
-	background: rgba(0,0,0,.6);
+	background: rgba(0,0,0,.7);
 	position: absolute;
 	left: 0;
 	top: 0;
 	text-align: center;
 	padding: 3em 0;
+	width: 100%;
+	min-height: 100vh;
 }
 .form-control-cells{
 	width: 4em;
@@ -53,3 +55,4 @@ body{background: #2a2b32; color: #fff;}
 	display: inline-block;
 }
 #wrapper{max-width: 50em;}
+.card{max-width: 75px;}

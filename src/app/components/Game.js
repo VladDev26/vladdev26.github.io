@@ -1,4 +1,8 @@
 import React, {Component} from "react";
+
+import Items from "./Items";
+import Buttons from "./Buttons";
+
 import {quantityAlert, gameTitle} from "../const/elements";
 
 let arr = [];
@@ -9,7 +13,6 @@ export default class Game extends Component{
 		super();
 		this.state = {
 			src: [],
-
 			hwData: {},
 			loaded: false,
 			timer: {
@@ -17,13 +20,13 @@ export default class Game extends Component{
 				score: 1000
 			},
 			quantity: 54,
-			flag: false,
 
 			showQuantityAlert: false,
 			showGameTitle: true,
 			showPlayBtn: true,
 			showRefreshBtn: false,
 			showCells: true,
+			showModal: false
 		};
 	}
 
@@ -32,7 +35,6 @@ export default class Game extends Component{
 	}
 
 
-	
 	goTimer(){
 		this.timer = setInterval(count.bind(this), 1000);
 		
@@ -43,12 +45,10 @@ export default class Game extends Component{
 			
 			this.setState({
 				timer: {
-					// timer,
 					sec: i,
 					score: 1000-i
 				}
 			});
-			// console.log('timer is on!');
 		}
 	}
 	stopTimer(){clearInterval(this.timer);}
@@ -69,38 +69,40 @@ export default class Game extends Component{
 		xhr.send(null);
 	}
 
-	generateLinks(number){
-		// check
-		const quantity = number/2;
-		if( (quantity>32) || 
-			(quantity<2) || 
-			( (quantity*2) % 2 != 0) || 
-			(typeof quantity !== 'number') 
+	checkCellsNumber(number){
+		const half = number/2;
+		if( (half>32) || 
+			(half<2) || 
+			( (half*2) % 2 != 0) || 
+			(typeof half !== 'number') 
 		){
-			console.log('error in generateLinks');
-			// this.refreshGame();
+			this.setState({
+				showQuantityAlert: true,
+				showGameTitle: true,
+
+				showPlayBtn: true,
+				showRefreshBtn: false,
+				showCells: true
+			});
 			return false;	
 		}
+		return true;
+	}
 
-		const imgs = 10;
+	generateLinks(number){
+		if(!this.checkCellsNumber(number)) return;
+
+		const limit = 10;
+		let num = number/2;
 		let links = [];
-		for(let i=0; i<quantity; i++){
-			if(i<imgs){
-				links.push('https://kde.link/test/'+i+'.png');
-			}else if(i<imgs*2){
-				let j = i-imgs;
-				links.push('https://kde.link/test/'+j+'.png');
-			}else if(i<imgs*3){
-				let k = i-imgs*2;
-				links.push('https://kde.link/test/'+k+'.png');
-			}else if(i<imgs*4){
-				let l = i-imgs*3;
-				links.push('https://kde.link/test/'+l+'.png');
-			}
+
+		for(let i=0, k=0; i<num; i++, k++){
+			if(k===limit){ k = 0; }
+			links.push(`https://kde.link/test/${k}.png`);
 		}
 		return links;
 	}
-	doubleLinks(arr){return arr.concat(arr);}
+	
 	shuffleLinks(doubled){
 		function shuffle(a) {
 			for (let i = a.length; i; i--) {
@@ -112,53 +114,40 @@ export default class Game extends Component{
 		return doubled;
 	}
 
-	
 
 	handleClick(e){
-		e.target.classList.toggle('opacity0');
+		let target = e.target;
+		target.classList.toggle('opacity0');
 
-		function checkTwin(a){return a !== e.target;}
-
-		if(arr[0] === e.target){
-			arr = arr.filter(checkTwin);
-			// console.log('stage 1');
-		}else if(arr.length>=2){
-			arr[0].classList.toggle('opacity0');
-			arr[1].classList.toggle('opacity0');
-			arr = [];
-			arr.push(e.target);
-			// console.log('stage 2');
-		}else{
-			arr.push(e.target);
-			if(arr[0] && arr[1]){
-				if (arr[0].src === arr[1].src){
-					arr[0].parentElement.className += ' bg-danger';
-					arr[1].parentElement.className += ' bg-danger';
-
-					arr[0].parentElement.classList.toggle('cool-shad-success');
-					arr[1].parentElement.classList.toggle('cool-shad-success');
-
-					arr[0].classList.toggle('game-img-clicked');
-					arr[1].classList.toggle('game-img-clicked');
-
-					arr = [];
+		switch(true){
+			case (arr[0] === target):
+				arr = arr.filter(el => el !== target);
+				break;
+			case (arr.length >= 2):
+				for(let elem of arr){ elem.classList.toggle('opacity0'); }
+				arr = [];
+				arr.push(target);
+				break;
+			default:
+				arr.push(target);
+				if(arr[0] && arr[1]){
+					if (arr[0].src === arr[1].src){
+						for(let elem of arr){
+							elem.parentElement.classList.add('bg-danger');
+							elem.parentElement.classList.remove('cool-shad-success');
+							elem.classList.toggle('game-img-clicked');
+						}
+						arr = [];
+					}
 				}
-			}
-			// console.log('stage 3');
 		}
+
 		let allImg = document.getElementsByClassName('game-img-clicked');
 
 		if(allImg.length == this.state.quantity){
 			this.stopTimer();
 			this.showModal();
 		}
-	}
-
-	showModal(){
-		const modal = document.getElementById('modal');
-		modal.style.width = window.innerWidth + 'px';
-		modal.style.height = window.innerHeight + 'px';
-		modal.classList.toggle('dnone');
 	}
 
 	refreshGame(){
@@ -173,116 +162,91 @@ export default class Game extends Component{
 
 			showPlayBtn: true,
 			showRefreshBtn: false,
-			showCells: false
+			showCells: true
 		});
-
-		console.log('refreshed!');
 	}
 
 	play(){
-		let quantity = this.state.quantity;
+		let genLinks = this.generateLinks(this.state.quantity);
+		if(!genLinks) return;
+		
+		let doubledLinks = genLinks.concat(genLinks);
 
-		let stage1 = this.generateLinks(quantity);
-		if(!stage1){
-			this.refreshGame();
-			this.setState({
-				showQuantityAlert: true,
-				showGameTitle: false,
-
-				showPlayBtn: true,
-				showRefreshBtn: false,
-				showCells: true
-			});
-			return false;
-		}
-
-		let stage2 = this.doubleLinks(stage1);
-		let stage3 = this.shuffleLinks(stage2);
+		let shuffledLinks = this.shuffleLinks(doubledLinks);
 
 		this.setState({
-			src: stage3,
+			src: shuffledLinks,
 			showQuantityAlert: false,
 			showGameTitle: false,
 
 			showPlayBtn: false,
 			showRefreshBtn: true,
 			showCells: false
+		}, () => {
+			this.goTimer();
 		});
-		this.goTimer();
 	}
 
-	closeModal(){
-		this.refreshGame();
-		this.setState({showCells: true});
-		modal.classList.toggle('dnone');
-	}
-
-	changeQuantity(e){
-		this.setState({quantity: e.target.value});
-	}
+	changeQuantity(quantity){this.setState({quantity})}
 
 	
+	showModal(){this.setState({showModal: true});}
+	closeModal(){
+		this.refreshGame();
+		this.setState({
+			showCells: true,
+			showModal: false
+		});
+	}
 
 	render(){
-		let image = this.state.src.map((item, i) => {
-			return(
-				<div key={i} className="card bg-success cool-shad-success mb-0 dib">
-					<img className="card-img-top img-fluid opacity0"
-					 	onClick={this.handleClick.bind(this)} src={item} alt=""/>
-				</div>
-			);
-		});
+		const state = this.state;
 
-		let playBtn = (
-			<button className="btn btn-primary"
-				onClick={this.play.bind(this)}
-			>Play</button>
-		);
-		let refreshBtn = (
-			<button className="btn btn-primary dnone"
-				onClick={this.refreshGame.bind(this)}
-			>Refresh</button>
-		);
 		let cells = (
 			<div id="cells" className="row text-xs-center mb-1">
 				<input className="form-control form-control-cells" type="text" 
-					value={this.state.quantity}
-					onChange={this.changeQuantity.bind(this)}
+					value={state.quantity}
+					onChange={e => this.changeQuantity(e.target.value)}
 				/> cells
+			</div>
+		);
+		let modal = (
+			<div id="modal" className="modal-wrap">
+				<h2>Your time: {state.timer.sec} sec</h2>
+				<h2>Your score: {state.timer.score} pts</h2>
+				<div>
+					<button className="btn btn-info" 
+						onClick={this.closeModal.bind(this)}>Close</button>
+				</div>
 			</div>
 		);
 
 		return(
 			<div className="container-fluid py-3">
-				{this.state.showGameTitle ? gameTitle : null}
-				{this.state.showQuantityAlert ? quantityAlert : null}
-				{this.state.showCells ? cells : null}
+				{state.showGameTitle ? gameTitle : null}
+				{state.showQuantityAlert ? quantityAlert : null}
+				{state.showCells ? cells : null}
 
-				<div className="row text-xs-center">
-					{this.state.showPlayBtn ? playBtn : null}
-					{this.state.showRefreshBtn ? refreshBtn : null}
-				</div>
+				<Buttons 
+					showPlayBtn={state.showPlayBtn}
+					showRefreshBtn={state.showRefreshBtn}
+					play={this.play.bind(this)}
+					refreshGame={this.refreshGame.bind(this)}
+				/>
 
 				<div className="row mt-1">
 					<div className="col-xs-6 text-xs-right">
-						{'Time: ' + this.state.timer.sec }
+						{'Time: ' + state.timer.sec }
 					</div>
 					<div className="col-xs-6">
-						{'Score: ' + this.state.timer.score }
+						{'Score: ' + state.timer.score }
 					</div>
 				</div>
 				
-				<div className="row py-1 text-xs-center">
-					<div id="wrapper" className="mx-auto">{image}</div>
-				</div>
-				<div id="modal" className="dnone modal-wrap">
-					<h2>Your time: {this.state.timer.sec} sec</h2>
-					<h2>Your score: {this.state.timer.score} pts</h2>
-					<div>
-						<button className="btn btn-info" 
-							onClick={this.closeModal.bind(this)}>Close</button>
-					</div>
-				</div>
+				<Items images={state.src} handleClick={this.handleClick.bind(this)}/>
+				
+
+				{state.showModal ? modal : null}
 			</div>
 		);
 	}

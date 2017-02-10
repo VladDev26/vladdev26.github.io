@@ -49,59 +49,31 @@
 
 	"use strict";
 	
-	Object.defineProperty(exports, "__esModule", {
-		value: true
-	});
-	exports.App = undefined;
-	
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-	
 	var _react = __webpack_require__(/*! react */ 1);
 	
 	var _react2 = _interopRequireDefault(_react);
 	
 	var _reactDom = __webpack_require__(/*! react-dom */ 32);
 	
-	var _reactDom2 = _interopRequireDefault(_reactDom);
-	
 	var _Game = __webpack_require__(/*! ./components/Game */ 178);
+	
+	var _Game2 = _interopRequireDefault(_Game);
+	
+	__webpack_require__(/*! ../../~/bootstrap/dist/css/bootstrap.min.css */ 180);
+	
+	__webpack_require__(/*! ./css/style.css */ 184);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	var App = function App() {
+		return _react2.default.createElement(
+			"div",
+			null,
+			_react2.default.createElement(_Game2.default, null)
+		);
+	};
 	
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-	
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-	
-	__webpack_require__(/*! ../../~/bootstrap/dist/css/bootstrap.min.css */ 179);
-	__webpack_require__(/*! ./css/style.css */ 183);
-	
-	var App = exports.App = function (_React$Component) {
-		_inherits(App, _React$Component);
-	
-		function App() {
-			_classCallCheck(this, App);
-	
-			return _possibleConstructorReturn(this, (App.__proto__ || Object.getPrototypeOf(App)).apply(this, arguments));
-		}
-	
-		_createClass(App, [{
-			key: "render",
-			value: function render() {
-				return _react2.default.createElement(
-					"div",
-					null,
-					_react2.default.createElement(_Game.Game, null)
-				);
-			}
-		}]);
-	
-		return App;
-	}(_react2.default.Component);
-	
-	_reactDom2.default.render(_react2.default.createElement(App, null), document.getElementById('app'));
-	// <IndexRoute component={Home} />
+	(0, _reactDom.render)(_react2.default.createElement(App, null), document.getElementById('app'));
 
 /***/ },
 /* 1 */
@@ -22075,18 +22047,19 @@
   \************************************/
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
+	"use strict";
 	
 	Object.defineProperty(exports, "__esModule", {
 		value: true
 	});
-	exports.Game = undefined;
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
 	var _react = __webpack_require__(/*! react */ 1);
 	
 	var _react2 = _interopRequireDefault(_react);
+	
+	var _elements = __webpack_require__(/*! ../const/elements */ 179);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -22098,8 +22071,8 @@
 	
 	var arr = [];
 	
-	var Game = exports.Game = function (_React$Component) {
-		_inherits(Game, _React$Component);
+	var Game = function (_Component) {
+		_inherits(Game, _Component);
 	
 		function Game() {
 			_classCallCheck(this, Game);
@@ -22108,7 +22081,6 @@
 	
 			_this.state = {
 				src: [],
-	
 				hwData: {},
 				loaded: false,
 				timer: {
@@ -22116,18 +22088,24 @@
 					score: 1000
 				},
 				quantity: 54,
-				flag: false
+	
+				showQuantityAlert: false,
+				showGameTitle: true,
+				showPlayBtn: true,
+				showRefreshBtn: false,
+				showCells: true,
+				showModal: false
 			};
 			return _this;
 		}
 	
 		_createClass(Game, [{
-			key: 'componentDidMount',
+			key: "componentDidMount",
 			value: function componentDidMount() {
 				this.getFieldSize();
 			}
 		}, {
-			key: 'goTimer',
+			key: "goTimer",
 			value: function goTimer() {
 				this.timer = setInterval(count.bind(this), 1000);
 	
@@ -22138,26 +22116,23 @@
 	
 					this.setState({
 						timer: {
-							// timer,
 							sec: i,
 							score: 1000 - i
 						}
 					});
-					console.log('timer is on!');
 				}
 			}
 		}, {
-			key: 'stopTimer',
+			key: "stopTimer",
 			value: function stopTimer() {
 				clearInterval(this.timer);
 			}
 		}, {
-			key: 'getFieldSize',
+			key: "getFieldSize",
 			value: function getFieldSize() {
 				var xhr = new XMLHttpRequest();
 				xhr.onreadystatechange = function () {
 					if (xhr.readyState == 4 && xhr.status == 200) {
-						// console.log(JSON.parse(xhr.responseText));
 						var parsed = JSON.parse(xhr.responseText);
 						this.setState({
 							hwData: parsed,
@@ -22170,25 +22145,30 @@
 				xhr.send(null);
 			}
 		}, {
-			key: 'showAlertQuantity',
-			value: function showAlertQuantity() {
-				document.getElementById('quantity-alert').classList.toggle('dnone');
-				this.refreshGame();
-			}
-		}, {
-			key: 'generateLinks',
-			value: function generateLinks(number) {
-				// check
-				var quantity = number / 2;
-				if (quantity > 32 || quantity < 2 || quantity * 2 % 2 != 0 || typeof quantity !== 'number') {
-					console.log('error in generateLinks');
-					// this.refreshGame();
+			key: "checkCellsNumber",
+			value: function checkCellsNumber(number) {
+				var half = number / 2;
+				if (half > 32 || half < 2 || half * 2 % 2 != 0 || typeof half !== 'number') {
+					this.setState({
+						showQuantityAlert: true,
+						showGameTitle: false,
+	
+						showPlayBtn: true,
+						showRefreshBtn: false,
+						showCells: true
+					});
 					return false;
 				}
+				return true;
+			}
+		}, {
+			key: "generateLinks",
+			value: function generateLinks(number) {
+				if (!this.checkCellsNumber(number)) return;
 	
 				var imgs = 10;
 				var links = [];
-				for (var i = 0; i < quantity; i++) {
+				for (var i = 0; i < number / 2; i++) {
 					if (i < imgs) {
 						links.push('https://kde.link/test/' + i + '.png');
 					} else if (i < imgs * 2) {
@@ -22205,12 +22185,7 @@
 				return links;
 			}
 		}, {
-			key: 'doubleLinks',
-			value: function doubleLinks(arr) {
-				return arr.concat(arr);
-			}
-		}, {
-			key: 'shuffleLinks',
+			key: "shuffleLinks",
 			value: function shuffleLinks(doubled) {
 				function shuffle(a) {
 					for (var i = a.length; i; i--) {
@@ -22224,40 +22199,54 @@
 				return doubled;
 			}
 		}, {
-			key: 'handleClick',
+			key: "handleClick",
 			value: function handleClick(e) {
-				e.target.classList.toggle('opacity0');
+				var target = e.target;
+				target.classList.toggle('opacity0');
 	
-				function checkTwin(a) {
-					return a !== e.target;
-				}
-	
-				if (arr[0] === e.target) {
-					arr = arr.filter(checkTwin);
-					// console.log('stage 1');
+				if (arr[0] === target) {
+					arr = arr.filter(function (el) {
+						return el !== target;
+					});
 				} else if (arr.length >= 2) {
 					arr[0].classList.toggle('opacity0');
 					arr[1].classList.toggle('opacity0');
 					arr = [];
-					arr.push(e.target);
-					// console.log('stage 2');
+					arr.push(target);
 				} else {
-					arr.push(e.target);
+					arr.push(target);
 					if (arr[0] && arr[1]) {
 						if (arr[0].src === arr[1].src) {
-							arr[0].parentElement.className += ' bg-danger';
-							arr[1].parentElement.className += ' bg-danger';
+							var _iteratorNormalCompletion = true;
+							var _didIteratorError = false;
+							var _iteratorError = undefined;
 	
-							arr[0].parentElement.classList.toggle('cool-shad-success');
-							arr[1].parentElement.classList.toggle('cool-shad-success');
+							try {
+								for (var _iterator = arr[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+									var elem = _step.value;
 	
-							arr[0].classList.toggle('game-img-clicked');
-							arr[1].classList.toggle('game-img-clicked');
+									elem.parentElement.className += ' bg-danger';
+									elem.parentElement.classList.toggle('cool-shad-success');
+									elem.classList.toggle('game-img-clicked');
+								}
+							} catch (err) {
+								_didIteratorError = true;
+								_iteratorError = err;
+							} finally {
+								try {
+									if (!_iteratorNormalCompletion && _iterator.return) {
+										_iterator.return();
+									}
+								} finally {
+									if (_didIteratorError) {
+										throw _iteratorError;
+									}
+								}
+							}
 	
 							arr = [];
 						}
 					}
-					// console.log('stage 3');
 				}
 				var allImg = document.getElementsByClassName('game-img-clicked');
 	
@@ -22267,21 +22256,7 @@
 				}
 			}
 		}, {
-			key: 'showModal',
-			value: function showModal() {
-				var modal = document.getElementById('modal');
-				modal.style.width = window.innerWidth + 'px';
-				modal.style.height = window.innerHeight + 'px';
-				modal.classList.toggle('dnone');
-			}
-		}, {
-			key: 'hasClass',
-			value: function hasClass(id, className) {
-				var flag = document.getElementById(id).classList.contains(className);
-				return flag ? true : false;
-			}
-		}, {
-			key: 'refreshGame',
+			key: "refreshGame",
 			value: function refreshGame() {
 				this.stopTimer();
 				this.setState({
@@ -22289,206 +22264,239 @@
 					timer: {
 						sec: 0,
 						score: 1000
-					}
+					},
+					showGameTitle: true,
+	
+					showPlayBtn: true,
+					showRefreshBtn: false,
+					showCells: true
 				});
 	
-				// document.getElementById('play').removeAttribute('disabled', 'disabled');
-				document.getElementById('play').classList.toggle('dnone');
-				console.log('refreshed!');
-				document.getElementById('refresh').classList.toggle('dnone');
-				document.getElementById('cells').classList.toggle('dnone');
-				document.getElementById('game-title').classList.toggle('dnone');
+				// console.log('refreshed!');
 			}
 		}, {
-			key: 'play',
+			key: "play",
 			value: function play() {
-				// document.getElementById('play').setAttribute('disabled', 'disabled');
-				var quantity = this.state.quantity;
-	
-				var stage1 = this.generateLinks(quantity);
-				if (!stage1) {
-					this.refreshGame();
-					document.getElementById('play').classList.remove('dnone');
-					document.getElementById('cells').classList.remove('dnone');
-	
-					document.getElementById('quantity-alert').classList.remove('dnone');
-					document.getElementById('refresh').classList.add('dnone');
-					document.getElementById('game-title').classList.add('dnone');
-					return false;
-				}
-	
-				var stage2 = this.doubleLinks(stage1);
-				var stage3 = this.shuffleLinks(stage2);
-	
-				this.setState({ src: stage3 });
-				this.goTimer();
-	
-				document.getElementById('play').classList.toggle('dnone');
-				document.getElementById('refresh').classList.toggle('dnone');
-				document.getElementById('cells').classList.toggle('dnone');
-				document.getElementById('game-title').classList.add('dnone');
-				document.getElementById('quantity-alert').classList.add('dnone');
-			}
-		}, {
-			key: 'closeModal',
-			value: function closeModal() {
-				this.refreshGame();
-				modal.classList.toggle('dnone');
-			}
-		}, {
-			key: 'changeQuantity',
-			value: function changeQuantity(e) {
-				this.setState({ quantity: e.target.value });
-			}
-		}, {
-			key: 'render',
-			value: function render() {
 				var _this2 = this;
 	
-				var image = this.state.src.map(function (item, i) {
+				var genLinks = this.generateLinks(this.state.quantity);
+				if (!genLinks) return;
+	
+				var doubledLinks = genLinks.concat(genLinks);
+	
+				var shuffledLinks = this.shuffleLinks(doubledLinks);
+	
+				this.setState({
+					src: shuffledLinks,
+					showQuantityAlert: false,
+					showGameTitle: false,
+	
+					showPlayBtn: false,
+					showRefreshBtn: true,
+					showCells: false
+				}, function () {
+					_this2.goTimer();
+				});
+			}
+		}, {
+			key: "changeQuantity",
+			value: function changeQuantity(quantity) {
+				this.setState({ quantity: quantity });
+			}
+		}, {
+			key: "showModal",
+			value: function showModal() {
+				this.setState({ showModal: true });
+			}
+		}, {
+			key: "closeModal",
+			value: function closeModal() {
+				this.refreshGame();
+				this.setState({
+					showCells: true,
+					showModal: false
+				});
+			}
+		}, {
+			key: "render",
+			value: function render() {
+				var _this3 = this;
+	
+				var state = this.state;
+				// console.log(state.hwData);
+				var image = state.src.map(function (item, i) {
 					return _react2.default.createElement(
-						'div',
+						"div",
 						{ key: i, className: "card bg-success cool-shad-success mb-0 dib" },
-						_react2.default.createElement('img', { className: 'card-img-top img-fluid opacity0',
-							onClick: _this2.handleClick.bind(_this2), src: item, alt: '' })
+						_react2.default.createElement("img", { className: "card-img-top img-fluid opacity0",
+							onClick: _this3.handleClick.bind(_this3), src: item, alt: "" })
 					);
 				});
-				return _react2.default.createElement(
-					'div',
-					{ className: 'container-fluid py-3' },
-					_react2.default.createElement(
-						'div',
-						{ id: 'game-title', className: 'row text-xs-center mb-1' },
-						_react2.default.createElement(
-							'h1',
-							null,
-							'Twin Pictures Game'
-						),
-						_react2.default.createElement(
-							'h2',
-							null,
-							'find all the same pictures'
-						)
-					),
-					_react2.default.createElement(
-						'div',
-						{ id: 'quantity-alert', className: 'row py-1 dnone' },
-						_react2.default.createElement(
-							'div',
-							{ className: 'alert alert-danger col-xs-12 col-md-6 offset-md-3' },
-							'You should input some ',
-							_react2.default.createElement(
-								'strong',
-								null,
-								'even'
-							),
-							' number from ',
-							_react2.default.createElement(
-								'strong',
-								null,
-								'4'
-							),
-							' to ',
-							_react2.default.createElement(
-								'strong',
-								null,
-								'64'
-							),
-							'.'
-						)
-					),
-					_react2.default.createElement(
-						'div',
-						{ id: 'cells', className: 'row text-xs-center mb-1' },
-						_react2.default.createElement('input', {
-							className: 'form-control form-control-cells',
 	
-							type: 'text',
-							value: this.state.quantity,
-							onChange: this.changeQuantity.bind(this)
-						}),
-						' cells'
+				var playBtn = _react2.default.createElement(
+					"button",
+					{ className: "btn btn-primary",
+						onClick: this.play.bind(this)
+					},
+					"Play"
+				);
+				var refreshBtn = _react2.default.createElement(
+					"button",
+					{ className: "btn btn-primary",
+						onClick: this.refreshGame.bind(this)
+					},
+					"Refresh"
+				);
+				var cells = _react2.default.createElement(
+					"div",
+					{ id: "cells", className: "row text-xs-center mb-1" },
+					_react2.default.createElement("input", { className: "form-control form-control-cells", type: "text",
+						value: state.quantity,
+						onChange: function onChange(e) {
+							return _this3.changeQuantity(e.target.value);
+						}
+					}),
+					" cells"
+				);
+				var modal = _react2.default.createElement(
+					"div",
+					{ id: "modal", className: "modal-wrap" },
+					_react2.default.createElement(
+						"h2",
+						null,
+						"Your time: ",
+						state.timer.sec,
+						" sec"
 					),
 					_react2.default.createElement(
-						'div',
-						{ className: 'row text-xs-center' },
+						"h2",
+						null,
+						"Your score: ",
+						state.timer.score,
+						" pts"
+					),
+					_react2.default.createElement(
+						"div",
+						null,
 						_react2.default.createElement(
-							'button',
-							{ id: 'play', className: 'btn btn-primary',
-								onClick: this.play.bind(this)
-							},
-							'Play'
+							"button",
+							{ className: "btn btn-info",
+								onClick: this.closeModal.bind(this) },
+							"Close"
+						)
+					)
+				);
+	
+				return _react2.default.createElement(
+					"div",
+					{ className: "container-fluid py-3" },
+					state.showGameTitle ? _elements.gameTitle : null,
+					state.showQuantityAlert ? _elements.quantityAlert : null,
+					state.showCells ? cells : null,
+					_react2.default.createElement(
+						"div",
+						{ className: "row text-xs-center" },
+						state.showPlayBtn ? playBtn : null,
+						state.showRefreshBtn ? refreshBtn : null
+					),
+					_react2.default.createElement(
+						"div",
+						{ className: "row mt-1" },
+						_react2.default.createElement(
+							"div",
+							{ className: "col-xs-6 text-xs-right" },
+							'Time: ' + state.timer.sec
 						),
 						_react2.default.createElement(
-							'button',
-							{ id: 'refresh', className: 'btn btn-primary dnone',
-								onClick: this.refreshGame.bind(this)
-							},
-							'Refresh'
+							"div",
+							{ className: "col-xs-6" },
+							'Score: ' + state.timer.score
 						)
 					),
 					_react2.default.createElement(
-						'div',
-						{ className: 'row mt-1' },
+						"div",
+						{ className: "row py-1 text-xs-center" },
 						_react2.default.createElement(
-							'div',
-							{ className: 'col-xs-6 text-xs-right' },
-							'Time: ' + this.state.timer.sec
-						),
-						_react2.default.createElement(
-							'div',
-							{ className: 'col-xs-6' },
-							'Score: ' + this.state.timer.score
-						)
-					),
-					_react2.default.createElement(
-						'div',
-						{ className: 'row py-1 text-xs-center' },
-						_react2.default.createElement(
-							'div',
-							{ id: 'wrapper', className: 'mx-auto' },
+							"div",
+							{ id: "wrapper", className: "mx-auto" },
 							image
 						)
 					),
-					_react2.default.createElement(
-						'div',
-						{ id: 'modal', className: 'dnone modal-wrap' },
-						_react2.default.createElement(
-							'h2',
-							null,
-							'Your time: ',
-							this.state.timer.sec,
-							' sec'
-						),
-						_react2.default.createElement(
-							'h2',
-							null,
-							'Your score: ',
-							this.state.timer.score,
-							' pts'
-						),
-						_react2.default.createElement(
-							'div',
-							null,
-							_react2.default.createElement(
-								'button',
-								{ className: 'btn btn-info',
-									onClick: this.closeModal.bind(this) },
-								'Close'
-							)
-						)
-					)
+					state.showModal ? modal : null
 				);
 			}
 		}]);
 	
 		return Game;
-	}(_react2.default.Component);
+	}(_react.Component);
 	
-	// <input className="form-control col-xs-2" type="text"/>
+	exports.default = Game;
 
 /***/ },
 /* 179 */
+/*!***********************************!*\
+  !*** ./src/app/const/elements.js ***!
+  \***********************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+	exports.gameTitle = exports.quantityAlert = undefined;
+	
+	var _react = __webpack_require__(/*! react */ 1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var quantityAlert = exports.quantityAlert = _react2.default.createElement(
+		"div",
+		{ className: "row py-1" },
+		_react2.default.createElement(
+			"div",
+			{ className: "alert alert-danger col-xs-12 col-md-6 offset-md-3" },
+			"You should input an ",
+			_react2.default.createElement(
+				"strong",
+				null,
+				"even"
+			),
+			" number from ",
+			_react2.default.createElement(
+				"strong",
+				null,
+				"4"
+			),
+			" to ",
+			_react2.default.createElement(
+				"strong",
+				null,
+				"64"
+			),
+			"."
+		)
+	);
+	
+	var gameTitle = exports.gameTitle = _react2.default.createElement(
+		"div",
+		{ className: "row text-xs-center mb-1" },
+		_react2.default.createElement(
+			"h1",
+			null,
+			"Twin Pictures Game"
+		),
+		_react2.default.createElement(
+			"h2",
+			null,
+			"find all the same pictures"
+		)
+	);
+
+/***/ },
+/* 180 */
 /*!************************************************!*\
   !*** ./~/bootstrap/dist/css/bootstrap.min.css ***!
   \************************************************/
@@ -22497,10 +22505,10 @@
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(/*! !./../../../css-loader!./bootstrap.min.css */ 180);
+	var content = __webpack_require__(/*! !./../../../css-loader!./bootstrap.min.css */ 181);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(/*! ./../../../style-loader/addStyles.js */ 182)(content, {});
+	var update = __webpack_require__(/*! ./../../../style-loader/addStyles.js */ 183)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
@@ -22517,13 +22525,13 @@
 	}
 
 /***/ },
-/* 180 */
+/* 181 */
 /*!***************************************************************!*\
   !*** ./~/css-loader!./~/bootstrap/dist/css/bootstrap.min.css ***!
   \***************************************************************/
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(/*! ./../../../css-loader/lib/css-base.js */ 181)();
+	exports = module.exports = __webpack_require__(/*! ./../../../css-loader/lib/css-base.js */ 182)();
 	// imports
 	
 	
@@ -22534,7 +22542,7 @@
 
 
 /***/ },
-/* 181 */
+/* 182 */
 /*!**************************************!*\
   !*** ./~/css-loader/lib/css-base.js ***!
   \**************************************/
@@ -22593,7 +22601,7 @@
 
 
 /***/ },
-/* 182 */
+/* 183 */
 /*!*************************************!*\
   !*** ./~/style-loader/addStyles.js ***!
   \*************************************/
@@ -22848,7 +22856,7 @@
 
 
 /***/ },
-/* 183 */
+/* 184 */
 /*!*******************************!*\
   !*** ./src/app/css/style.css ***!
   \*******************************/
@@ -22857,10 +22865,10 @@
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(/*! !./../../../~/css-loader!./style.css */ 184);
+	var content = __webpack_require__(/*! !./../../../~/css-loader!./style.css */ 185);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(/*! ./../../../~/style-loader/addStyles.js */ 182)(content, {});
+	var update = __webpack_require__(/*! ./../../../~/style-loader/addStyles.js */ 183)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
@@ -22877,18 +22885,18 @@
 	}
 
 /***/ },
-/* 184 */
+/* 185 */
 /*!**********************************************!*\
   !*** ./~/css-loader!./src/app/css/style.css ***!
   \**********************************************/
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(/*! ./../../../~/css-loader/lib/css-base.js */ 181)();
+	exports = module.exports = __webpack_require__(/*! ./../../../~/css-loader/lib/css-base.js */ 182)();
 	// imports
 	
 	
 	// module
-	exports.push([module.id, "body{background: #2a2b32; color: #fff;}\r\n\r\n#app .nav-link{color:#000;}\r\n\r\n/*#app .img-fluid{max-height: 20em;}*/\r\n\r\n.grid-item { width: 200px; }\r\n\r\n\r\n\r\n.cool-shad-success:hover{\r\n\tbox-shadow: 0px 0px 19px 2px rgba(54,166,46,1);\r\n}\r\n.cool-shad-primary:hover{\r\n\tbox-shadow: 0px 0px 19px 2px #025aa5;\r\n}\r\n.cool-shad-danger:hover{\r\n\tbox-shadow: 0px 0px 19px 2px #d9534f;\r\n}\r\n.cool-shad-warning:hover{\r\n\tbox-shadow: 0px 0px 19px 2px #ec971f;\r\n}\r\n.cool-shad-info:hover{\r\n\tbox-shadow: 0px 0px 19px 2px #31b0d5;\r\n}\r\n\r\n.cool-shad-none:hover{\r\n\tbox-shadow: none;\r\n}\r\n\r\n.opacity0{opacity: 0;}\r\n.dib{display: inline-block;}\r\n\r\n.game-img-clicked{visibility: hidden;}\r\n.dnone{display: none!important;}\r\n\r\n.close-modal{\r\n\tfont-size: 5em;\r\n\tposition: absolute;\r\n}\r\n.modal-wrap{\r\n\tbackground: rgba(0,0,0,.6);\r\n\tposition: absolute;\r\n\tleft: 0;\r\n\ttop: 0;\r\n\ttext-align: center;\r\n\tpadding: 3em 0;\r\n}\r\n.form-control-cells{\r\n\twidth: 4em;\r\n\tmargin: 0 auto;\r\n\tcolor: #000;\r\n\tdisplay: inline-block;\r\n}\r\n#wrapper{max-width: 50em;}", ""]);
+	exports.push([module.id, "body{background: #2a2b32; color: #fff;}\r\n\r\n#app .nav-link{color:#000;}\r\n\r\n/*#app .img-fluid{max-height: 20em;}*/\r\n\r\n.grid-item { width: 200px; }\r\n\r\n\r\n\r\n.cool-shad-success:hover{\r\n\tbox-shadow: 0px 0px 19px 2px rgba(54,166,46,1);\r\n}\r\n.cool-shad-primary:hover{\r\n\tbox-shadow: 0px 0px 19px 2px #025aa5;\r\n}\r\n.cool-shad-danger:hover{\r\n\tbox-shadow: 0px 0px 19px 2px #d9534f;\r\n}\r\n.cool-shad-warning:hover{\r\n\tbox-shadow: 0px 0px 19px 2px #ec971f;\r\n}\r\n.cool-shad-info:hover{\r\n\tbox-shadow: 0px 0px 19px 2px #31b0d5;\r\n}\r\n\r\n.cool-shad-none:hover{\r\n\tbox-shadow: none;\r\n}\r\n\r\n.opacity0{opacity: 0;}\r\n.dib{display: inline-block;}\r\n\r\n.game-img-clicked{visibility: hidden;}\r\n.dnone{display: none!important;}\r\n\r\n.close-modal{\r\n\tfont-size: 5em;\r\n\tposition: absolute;\r\n}\r\n.modal-wrap{\r\n\tbackground: rgba(0,0,0,.6);\r\n\tposition: absolute;\r\n\tleft: 0;\r\n\ttop: 0;\r\n\ttext-align: center;\r\n\tpadding: 3em 0;\r\n\twidth: 100%;\r\n\tmin-height: 100vh;\r\n}\r\n.form-control-cells{\r\n\twidth: 4em;\r\n\tmargin: 0 auto;\r\n\tcolor: #000;\r\n\tdisplay: inline-block;\r\n}\r\n#wrapper{max-width: 50em;}", ""]);
 	
 	// exports
 
