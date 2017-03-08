@@ -3,8 +3,11 @@ import axios from "axios";
 
 import Items from "./Items";
 import Buttons from "./Buttons";
+import Modal from "./Modal";
 
 import {quantityAlert, gameTitle} from "../const/elements";
+
+import initState from '../const/initState';
 
 let arr = [];
 
@@ -12,22 +15,13 @@ export default class Game extends Component{
 
 	constructor(){
 		super();
-		this.state = {
-			src: [],
-			hwData: {},
-			timer: {
-				sec: 0,
-				score: 1000
-			},
-			quantity: 64,
+		this.state = {...initState};
 
-			showQuantityAlert: false,
-			showGameTitle: true,
-			showPlayBtn: true,
-			showRefreshBtn: false,
-			showCells: true,
-			showModal: false
-		};
+		this.play = this.play.bind(this);
+		this.refreshGame = this.refreshGame.bind(this);
+		this.handleClick = this.handleClick.bind(this);
+		this.closeModal = this.closeModal.bind(this);
+		this.changeQuantity = this.changeQuantity.bind(this);
 	}
 
 	componentDidMount(){
@@ -177,10 +171,12 @@ export default class Game extends Component{
 		});
 	}
 
-	changeQuantity(quantity){this.setState({quantity})}
+	changeQuantity(e){
+		this.setState({quantity: e.target.value});
+	}
 
 	
-	showModal(){this.setState({showModal: true});}
+	showModal(){this.setState({showModal: true})}
 	closeModal(){
 		this.refreshGame();
 		this.setState({
@@ -191,23 +187,14 @@ export default class Game extends Component{
 
 	render(){
 		const state = this.state;
+		const {changeQuantity, play, refreshGame, handleClick, closeModal} = this;
 
 		let cells = (
 			<div id="cells" className="row text-xs-center mb-1">
 				<input className="form-control form-control-cells" type="text" 
 					value={state.quantity}
-					onChange={e => this.changeQuantity(e.target.value)}
+					onChange={changeQuantity}
 				/> cells
-			</div>
-		);
-		let modal = (
-			<div id="modal" className="modal-wrap">
-				<h2>Your time: {state.timer.sec} sec</h2>
-				<h2>Your score: {state.timer.score} pts</h2>
-				<div>
-					<button className="btn btn-info" 
-						onClick={this.closeModal.bind(this)}>Close</button>
-				</div>
 			</div>
 		);
 
@@ -220,8 +207,8 @@ export default class Game extends Component{
 				<Buttons 
 					showPlayBtn={state.showPlayBtn}
 					showRefreshBtn={state.showRefreshBtn}
-					play={this.play.bind(this)}
-					refreshGame={this.refreshGame.bind(this)}
+					play={play}
+					refreshGame={refreshGame}
 				/>
 
 				<div className="row mt-1">
@@ -233,10 +220,15 @@ export default class Game extends Component{
 					</div>
 				</div>
 				
-				<Items images={state.src} handleClick={this.handleClick.bind(this)}/>
+				<Items images={state.src} handleClick={handleClick}/>
 				
 
-				{state.showModal ? modal : null}
+				{state.showModal ? 
+					<Modal 
+						time={state.timer.sec}
+						score={state.timer.score}
+						closeModal={closeModal}/> : 
+					null}
 			</div>
 		);
 	}

@@ -1,20 +1,20 @@
 import React from "react";
 
-const Buttons = props => {
+function Buttons({play, refreshGame, showPlayBtn, showRefreshBtn}) {
 	let playBtn = (
 		<button className="btn btn-primary"
-			onClick={props.play}
+			onClick={play}
 		>Play</button>
 	);
 	let refreshBtn = (
 		<button className="btn btn-primary"
-			onClick={props.refreshGame}
+			onClick={refreshGame}
 		>Refresh</button>
 	);
 	return(
 		<div className="row text-xs-center">
-			{props.showPlayBtn ? playBtn : null}
-			{props.showRefreshBtn ? refreshBtn : null}
+			{showPlayBtn ? playBtn : null}
+			{showRefreshBtn ? refreshBtn : null}
 		</div>
 	);
 };
